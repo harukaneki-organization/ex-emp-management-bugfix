@@ -18,9 +18,21 @@ public class InsertAdministratorForm {
 	@Email(message = "形式が違います")
 	/** メールアドレス */
 	private String mailAddress;
+
+	public String getConfirmationPassword() {
+		return confirmationPassword;
+	}
+
+	public void setConfirmationPassword(String confirmationPassword) {
+		this.confirmationPassword = confirmationPassword;
+	}
+
 	@NotBlank(message = "パスワードを入力してください")
 	/** パスワード */
 	private String password;
+	@NotBlank(message = "確認パスワードを入力してください")
+	/** パスワード */
+	private String confirmationPassword;
 
 	public String getName() {
 		return name;

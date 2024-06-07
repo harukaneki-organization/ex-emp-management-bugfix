@@ -78,18 +78,20 @@ public class AdministratorController {
 	@PostMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result) {
 
-		if(result.hasErrors()){
-			return toInsert(form);
-		}
-		Administrator administrator = new Administrator();
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator,result);
-
-		if(result.hasErrors()){
-			return toInsert(form);
+		if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
+			result.rejectValue("mailAddress", " ", "メールアドレスが既に使用されています。");
 		}
 
-		return "redirect:/toInsert";
+		if (!form.getPassword().equals(form.getConfirmationPassword())) {
+			result.rejectValue("password", " ", "パスワードが一致しません。");
+		}
+
+		if (result.hasErrors()) {
+			return toInsert(form);
+		}
+
+
+		return "redirect:/";
 	}
 
 
@@ -119,6 +121,7 @@ public class AdministratorController {
 			redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return "redirect:/";
 		}
+		session.setAttribute("administratorName",administrator.getName());
 		return "redirect:/employee/showList";
 	}
 
