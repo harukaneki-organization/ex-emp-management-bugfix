@@ -26,16 +26,9 @@ public class AdministratorService {
 	 * 
 	 * @param administrator 管理者情報
 	 */
-	public void insert(Administrator administrator, BindingResult result) {
-
-			if (administratorRepository.findByMailAddress(administrator.getMailAddress()) != null) {
-				result.rejectValue("mailAddress", " ", "メールアドレスが既に使用されています。");
-			} else {
-				administratorRepository.insert(administrator);
-			}
-
+	public void insert(Administrator administrator) {
+			administratorRepository.insert(administrator);
 	}
-
 
 	/**
 	 * ログインをします.
@@ -49,12 +42,13 @@ public class AdministratorService {
 		return administrator;
 	}
 
-
-
-
-
-
-
-
-
+	/**
+	 * メールアドレスを取得します.
+	 *
+	 * @param mailAddress
+	 * @return メールアドレス
+	 */
+	public Administrator findByMailAddress(String mailAddress) {
+		return administratorRepository.findByMailAddress(mailAddress);
+	}
 }

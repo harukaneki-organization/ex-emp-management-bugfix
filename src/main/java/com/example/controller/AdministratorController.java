@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者情報を操作するコントローラー.
- * 
+ *
  * @author igamasayuki
  *
  */
@@ -38,7 +38,7 @@ public class AdministratorController {
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
-	 * 
+	 *
 	 * @return フォーム
 	 */
 	@ModelAttribute
@@ -48,7 +48,7 @@ public class AdministratorController {
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
-	 * 
+	 *
 	 * @return フォーム
 	 */
 	@ModelAttribute
@@ -61,7 +61,7 @@ public class AdministratorController {
 	/////////////////////////////////////////////////////
 	/**
 	 * 管理者登録画面を出力します.
-	 * 
+	 *
 	 * @return 管理者登録画面
 	 */
 	@GetMapping("/toInsert")
@@ -71,26 +71,30 @@ public class AdministratorController {
 
 	/**
 	 * 管理者情報を登録します.
-	 * 
+	 *
 	 * @param form 管理者情報用フォーム
 	 * @return ログイン画面へリダイレクト
 	 */
 	@PostMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form, BindingResult result) {
+		if (administratorService.findByMailAddress(form.getMailAddress()) != null) {
+			result.rejectValue("mailAddress", " ", "メールアドレスが既に使用されています。");
+			return toInsert(form);
+		}
 
 		if(result.hasErrors()){
 			return toInsert(form);
 		}
+
 		Administrator administrator = new Administrator();
 		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator,result);
+		administratorService.insert(administrator);
 
-		if(result.hasErrors()){
-			return toInsert(form);
-		}
+
 
 		return "redirect:/toInsert";
 	}
+
 
 
 	/////////////////////////////////////////////////////
@@ -98,7 +102,7 @@ public class AdministratorController {
 	/////////////////////////////////////////////////////
 	/**
 	 * ログイン画面を出力します.
-	 * 
+	 *
 	 * @return ログイン画面
 	 */
 	@GetMapping("/")
@@ -108,7 +112,7 @@ public class AdministratorController {
 
 	/**
 	 * ログインします.
-	 * 
+	 *
 	 * @param form 管理者情報用フォーム
 	 * @return ログイン後の従業員一覧画面
 	 */
@@ -127,7 +131,7 @@ public class AdministratorController {
 	/////////////////////////////////////////////////////
 	/**
 	 * ログアウトをします. (SpringSecurityに任せるためコメントアウトしました)
-	 * 
+	 *
 	 * @return ログイン画面
 	 */
 	@GetMapping(value = "/logout")
