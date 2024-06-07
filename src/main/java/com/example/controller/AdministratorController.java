@@ -20,9 +20,8 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  * 管理者情報を操作するコントローラー.
- * 
- * @author igamasayuki
  *
+ * @author igamasayuki
  */
 @Controller
 @RequestMapping("/")
@@ -140,3 +139,4 @@ public class AdministratorController {
 	}
 
 }
+
