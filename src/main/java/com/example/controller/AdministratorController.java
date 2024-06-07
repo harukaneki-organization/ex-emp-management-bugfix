@@ -88,7 +88,7 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return toInsert(form);
 		}
-
+		session.setAttribute("administratorName", form.getName());
 
 		return "redirect:/";
 	}
