@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 
 /**
  * 管理者情報を操作するサービス.
- * 
+ *
  * @author igamasayuki
  *
  */
@@ -23,16 +23,18 @@ public class AdministratorService {
 
 	/**
 	 * 管理者情報を登録します.
-	 * 
+	 *
 	 * @param administrator 管理者情報
 	 */
 	public void insert(Administrator administrator) {
+
 			administratorRepository.insert(administrator);
+
 	}
 
 	/**
 	 * ログインをします.
-	 * 
+	 *
 	 * @param mailAddress メールアドレス
 	 * @param password    パスワード
 	 * @return 管理者情報 存在しない場合はnullが返ります
@@ -51,4 +53,6 @@ public class AdministratorService {
 	public Administrator findByMailAddress(String mailAddress) {
 		return administratorRepository.findByMailAddress(mailAddress);
 	}
+
 }
+
