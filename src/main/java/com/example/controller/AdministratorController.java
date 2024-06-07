@@ -3,6 +3,8 @@ package com.example.controller;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,8 @@ public class AdministratorController {
 
 	@Autowired
 	private HttpSession session;
+
+
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -61,7 +65,7 @@ public class AdministratorController {
 	 * @return 管理者登録画面
 	 */
 	@GetMapping("/toInsert")
-	public String toInsert() {
+	public String toInsert(InsertAdministratorForm form) {
 		return "administrator/insert";
 	}
 
@@ -72,12 +76,16 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@PostMapping("/insert")
-	public String insert(InsertAdministratorForm form) {
+	public String insert(@Validated InsertAdministratorForm form, BindingResult result) {
+
+		if(result.hasErrors()){
+			return toInsert(form);
+		}
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
-		return "administrator/login";
+		return toInsert(form);
 	}
 
 	/////////////////////////////////////////////////////

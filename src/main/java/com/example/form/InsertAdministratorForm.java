@@ -1,5 +1,9 @@
 package com.example.form;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 /**
  * 管理者情報登録時に使用するフォーム.
  * 
@@ -7,10 +11,14 @@ package com.example.form;
  * 
  */
 public class InsertAdministratorForm {
+	@NotBlank(message = "名前を入力してください")
 	/** 名前 */
 	private String name;
+	@NotBlank(message = "メールアドレスを入力してください")
+	@Email(message = "形式が違います")
 	/** メールアドレス */
 	private String mailAddress;
+	@NotBlank(message = "パスワードを入力してください")
 	/** パスワード */
 	private String password;
 
