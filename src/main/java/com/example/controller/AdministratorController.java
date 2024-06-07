@@ -89,7 +89,7 @@ public class AdministratorController {
 			return toInsert(form);
 		}
 
-		return "redirect:/toInsert";
+		return "redirect:/";
 	}
 
 
