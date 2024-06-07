@@ -27,15 +27,13 @@ public class AdministratorService {
 	 * @param administrator 管理者情報
 	 */
 	public void insert(Administrator administrator, BindingResult result) {
-		try {
+
 			if (administratorRepository.findByMailAddress(administrator.getMailAddress()) != null) {
 				result.rejectValue("mailAddress", " ", "メールアドレスが既に使用されています。");
 			} else {
 				administratorRepository.insert(administrator);
 			}
-		} catch (Exception e) {
-			result.reject("Error", "予期せぬエラーが発生しました。");
-		}
+
 	}
 
 

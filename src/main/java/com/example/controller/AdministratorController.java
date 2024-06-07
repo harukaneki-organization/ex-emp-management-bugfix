@@ -84,8 +84,14 @@ public class AdministratorController {
 		Administrator administrator = new Administrator();
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator,result);
-		return toInsert(form);
+
+		if(result.hasErrors()){
+			return toInsert(form);
+		}
+
+		return "redirect:/toInsert";
 	}
+
 
 	/////////////////////////////////////////////////////
 	// ユースケース：ログインをする
