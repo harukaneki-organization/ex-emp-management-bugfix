@@ -96,8 +96,13 @@
         >
           <!-- ここから上を編集する必要はありません -->
 
-          <!-- ここにモックのtable要素を貼り付けます -->
+          <form th:action="@{/employee/showList}">
+            <p th:text="${notFindName}">一件もありませんでした</p>
+            <input type="text" name="findName" id="findName" />
+            <button>検索</button>
+          </form>
 
+          <!-- ここにモックのtable要素を貼り付けます -->
           <table class="table table-striped">
             <thead>
               <tr>
