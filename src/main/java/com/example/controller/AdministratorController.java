@@ -88,6 +88,9 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return toInsert(form);
 		}
+		Administrator administrator = new Administrator();
+		BeanUtils.copyProperties(form,administrator);
+		administratorService.insert(administrator);
 		session.setAttribute("administratorName", form.getName());
 
 		return "redirect:/";

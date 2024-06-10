@@ -47,9 +47,13 @@ public class AdministratorService {
 	 */
 	public Administrator login(String mailAddress, String password) {
 		//パスワードをハッシュ化
-		password = passwordEncoder.encode(password);
-		Administrator administrator = administratorRepository.findByMailAddressAndPassward(mailAddress, password);
-		return administrator;
+		System.out.println(password);
+
+		Administrator administrator = administratorRepository.findByMailAddress(mailAddress);
+		if(passwordEncoder.matches(password,administrator.getPassword())){
+			return administrator;
+		}
+		return null;
 	}
 
 	/**
