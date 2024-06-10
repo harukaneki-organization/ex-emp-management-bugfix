@@ -2,6 +2,7 @@ package com.example.repository;
 
 import java.util.List;
 
+import com.example.domain.Administrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -30,6 +31,7 @@ public class EmployeeRepository {
 		employee.setName(rs.getString("name"));
 		employee.setImage(rs.getString("image"));
 		employee.setGender(rs.getString("gender"));
+
 		employee.setHireDate(rs.getDate("hire_date"));
 		employee.setMailAddress(rs.getString("mail_address"));
 		employee.setZipCode(rs.getString("zip_code"));
@@ -37,7 +39,7 @@ public class EmployeeRepository {
 		employee.setTelephone(rs.getString("telephone"));
 		employee.setSalary(rs.getInt("salary"));
 		employee.setCharacteristics(rs.getString("characteristics"));
-		employee.setDependentsCount(rs.getInt("dependents_count"));
+		employee.setDependentsCountString(rs.getInt("dependents_count"));
 		return employee;
 	};
 
@@ -73,6 +75,17 @@ public class EmployeeRepository {
 
 		return development;
 	}
+	/**
+	 * 従業員情報を挿入します.
+	 *
+	 * @param employee 従業員情報
+	 */
+	public void insert(Employee employee) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
+		String sql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count)VALUES(:id,:name,:image,:gender,:hireDate,:mailAddress,:zipCode,:address,:telephone,:salary,:characteristics,:dependentsCountString);";
+		template.update(sql, param);
+
+	}
 
 	/**
 	 * 従業員情報を変更します.
@@ -94,7 +107,7 @@ public class EmployeeRepository {
 		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees WHERE name LIKE :name ORDER BY hire_date DESC;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name","%"+name+"%");
 		return template.query(sql,param,EMPLOYEE_ROW_MAPPER);
-
-
 	}
+
+	//maxIDをさがして、serviceで＋１
 }

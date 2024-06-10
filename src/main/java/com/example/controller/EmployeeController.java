@@ -1,8 +1,13 @@
 package com.example.controller;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.example.form.InsertAdministratorForm;
+import com.example.form.InsertEmployeeForm;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +25,7 @@ import com.example.service.EmployeeService;
 /**
  * 従業員情報を操作するコントローラー.
  * 
- * @author igamasayuki
+ * @author haruka.yamaneki
  *
  */
 @Controller
@@ -39,6 +44,18 @@ public class EmployeeController {
 	public UpdateEmployeeForm setUpForm() {
 		return new UpdateEmployeeForm();
 	}
+
+	/**
+	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
+	 *
+	 * @return フォーム
+	 */
+	@ModelAttribute
+	public InsertEmployeeForm insertEmployeeForm() {
+		return new InsertEmployeeForm();
+	}
+
+
 
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員一覧を表示する
@@ -97,8 +114,45 @@ public class EmployeeController {
 		}
 		Employee employee = new Employee();
 		employee.setId(form.getIntId());
-		employee.setDependentsCount(form.getIntDependentsCount());
+		employee.setDependentsCountString(form.getIntDependentsCount());
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
+	}
+
+
+
+	/**
+	 * 管理者登録画面を出力します.
+	 *
+	 * @return 管理者登録画面
+	 */
+	@GetMapping("/toInsert")
+	public String toInsert(InsertEmployeeForm form) {
+		return "employee/insert";
+	}
+
+	/**
+	 * 従業員情報を登録します.
+	 *
+	 * @param form 従業員情報用フォーム
+	 */
+	@PostMapping("/insert")
+	public String insert(@Validated InsertEmployeeForm form, BindingResult result){
+
+		if (result.hasErrors()) {
+			return toInsert(form);
+		}
+
+		Employee employee = new Employee();
+		BeanUtils.copyProperties(form,employee);
+		Date HireDate = java.util.Date.from(form.getHireDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		employee.setHireDate(HireDate);
+		employeeService.insert(employee);
+		return "redirect:/employee/showList";
+
+
+
+
+
 	}
 }
