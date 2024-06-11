@@ -83,12 +83,12 @@ public class EmployeeRepository {
 	public void insert(Employee employee) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
 		String sql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count)VALUES(:id,:name,:image,:gender,:hireDate,:mailAddress,:zipCode,:address,:telephone,:salary,:characteristics,:dependentsCount);";
-		employee.setId(getMaxId());
+		employee.setId(getPrimaryId());
 		template.update(sql, param);
 
 	}
 
-	public Integer getMaxId(){
+	public Integer getPrimaryId(){
 		String sql = "SELECT Max(id) FROM employees;";
 		Integer maxId =  template.queryForObject(sql,new MapSqlParameterSource(), Integer.class);
 		return maxId + 1;
