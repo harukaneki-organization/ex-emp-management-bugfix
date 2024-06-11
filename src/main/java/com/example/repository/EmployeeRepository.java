@@ -39,7 +39,7 @@ public class EmployeeRepository {
 		employee.setTelephone(rs.getString("telephone"));
 		employee.setSalary(rs.getInt("salary"));
 		employee.setCharacteristics(rs.getString("characteristics"));
-		employee.setDependentsCountString(rs.getInt("dependents_count"));
+		employee.setDependentsCount(rs.getInt("dependents_count"));
 		return employee;
 	};
 
@@ -82,9 +82,16 @@ public class EmployeeRepository {
 	 */
 	public void insert(Employee employee) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
-		String sql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count)VALUES(:id,:name,:image,:gender,:hireDate,:mailAddress,:zipCode,:address,:telephone,:salary,:characteristics,:dependentsCountString);";
+		String sql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count)VALUES(:id,:name,:image,:gender,:hireDate,:mailAddress,:zipCode,:address,:telephone,:salary,:characteristics,:dependentsCount);";
+		employee.setId(getMaxId());
 		template.update(sql, param);
 
+	}
+
+	public Integer getMaxId(){
+		String sql = "SELECT Max(id) FROM employees;";
+		Integer maxId =  template.queryForObject(sql,new MapSqlParameterSource(), Integer.class);
+		return maxId + 1;
 	}
 
 	/**
@@ -109,5 +116,5 @@ public class EmployeeRepository {
 		return template.query(sql,param,EMPLOYEE_ROW_MAPPER);
 	}
 
-	//maxIDをさがして、serviceで＋１
+
 }

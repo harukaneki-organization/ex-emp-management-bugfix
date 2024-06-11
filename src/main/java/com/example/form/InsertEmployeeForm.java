@@ -21,7 +21,7 @@ public class InsertEmployeeForm {
     /**
      * 従業員名
      */
-    //@NotBlank(message = "画像を入力してください")
+    @NotBlank(message = "名前を入力してください")
     private String name;
     /**
      * 画像
@@ -69,7 +69,7 @@ public class InsertEmployeeForm {
      * 扶養人数
      */
     @NotBlank(message = "扶養人数を入力してください")
-    private String dependentsCountString;
+    private String dependentsCount;
 
     public String getaddress() {
         return address;
@@ -167,11 +167,30 @@ public class InsertEmployeeForm {
         this.characteristics = characteristics;
     }
 
-    public String getdependentsCountString() {
-        return dependentsCountString;
+    public String getDependentsCount() {
+        return dependentsCount;
     }
 
-    public void setdependentsCountString(String dependentsCountString) {
-        this.dependentsCountString = dependentsCountString;
+    public void setDependentsCount(String dependentsCount) {
+        this.dependentsCount = dependentsCount;
     }
+
+    @Override
+    public String toString() {
+        return "InsertEmployeeForm{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", image=" + image +
+                ", gender='" + gender + '\'' +
+                ", hireDate=" + hireDate +
+                ", mailAddress='" + mailAddress + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", address='" + address + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", salary='" + salary + '\'' +
+                ", characteristics='" + characteristics + '\'' +
+                ", dependentsCount='" + dependentsCount + '\'' +
+                '}';
+    }
+
 }

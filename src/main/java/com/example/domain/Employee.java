@@ -32,7 +32,7 @@ public class Employee {
 	/** 特性 */
 	private String characteristics;
 	/** 扶養人数 */
-	private Integer dependentsCountString;
+	private Integer dependentsCount;
 
 	/**
 	 * 引数無しのコンストラクタ.
@@ -54,11 +54,11 @@ public class Employee {
 	 * @param telephone       電話番号
 	 * @param salary          給料
 	 * @param characteristics 特性
-	 * @param dependentsCountString 扶養人数
+	 * @param dependentsCount 扶養人数
 	 */
 	public Employee(Integer id, String name, String image, String gender, Date hireDate, String mailAddress,
 					String zipCode, String address, String telephone, Integer salary, String characteristics,
-					Integer dependentsCountString) {
+					Integer dependentsCount) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -71,7 +71,7 @@ public class Employee {
 		this.telephone = telephone;
 		this.salary = salary;
 		this.characteristics = characteristics;
-		this.dependentsCountString = dependentsCountString;
+		this.dependentsCount = dependentsCount;
 
 	}
 
@@ -230,19 +230,19 @@ public class Employee {
 	}
 
 	/**
-	 * @return the dependentsCountString
+	 * @return the dependentsCount
 	 */
-	public Integer getdependentsCountString() {
-		return dependentsCountString;
+	public Integer getdependentsCount() {
+		return dependentsCount;
 	}
 
 
-	public Integer getDependentsCountString() {
-		return dependentsCountString;
+	public Integer getDependentsCount() {
+		return dependentsCount;
 	}
 
-	public void setDependentsCountString(Integer dependentsCountString) {
-		this.dependentsCountString = dependentsCountString;
+	public void setDependentsCount(Integer dependentsCount) {
+		this.dependentsCount = dependentsCount;
 	}
 
 	@Override
@@ -259,7 +259,7 @@ public class Employee {
 				", telephone='" + telephone + '\'' +
 				", salary=" + salary +
 				", characteristics='" + characteristics + '\'' +
-				", dependentsCountString=" + dependentsCountString +
+				", dependentsCount=" + dependentsCount +
 				'}';
 	}
 }

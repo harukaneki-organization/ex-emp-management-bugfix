@@ -49,11 +49,9 @@ public class EmployeeService {
 	 *
 	 * @param employee 従業員情報
 	 */
-	public void insert(Employee employee) {
+	synchronized public void insert(Employee employee) {
 		employeeRepository.insert(employee);
 	}
-
-
 
 	/**
 	 * 従業員情報を更新します.

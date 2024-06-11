@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -54,8 +55,6 @@ public class EmployeeController {
 	public InsertEmployeeForm insertEmployeeForm() {
 		return new InsertEmployeeForm();
 	}
-
-
 
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員一覧を表示する
@@ -114,12 +113,10 @@ public class EmployeeController {
 		}
 		Employee employee = new Employee();
 		employee.setId(form.getIntId());
-		employee.setDependentsCountString(form.getIntDependentsCount());
+		employee.setDependentsCount(form.getIntDependentsCount());
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
 	}
-
-
 
 	/**
 	 * 管理者登録画面を出力します.
@@ -147,11 +144,27 @@ public class EmployeeController {
 		BeanUtils.copyProperties(form,employee);
 		Date HireDate = java.util.Date.from(form.getHireDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		employee.setHireDate(HireDate);
+		employee.setSalary(Integer.parseInt(form.getSalary()));
+		employee.setDependentsCount(Integer.parseInt(form.getDependentsCount()));
+
+
+		try{
+			String base64FileString = Base64.getEncoder().encodeToString(form.getImage().getBytes());
+			if("image/jpg".equals(form.getImage().getContentType())) {
+				base64FileString = "data:image/jpeg;base64," + base64FileString;
+			} else if("image/png".equals(form.getImage().getContentType())) {
+				base64FileString = "data:image/png;base64," + base64FileString;
+			}
+
+			employee.setImage(base64FileString);
+
+		}catch (Exception e){
+
+		}
+
 		employeeService.insert(employee);
+
 		return "redirect:/employee/showList";
-
-
-
 
 
 	}
