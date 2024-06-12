@@ -72,11 +72,17 @@ public class EmployeeController {
 			employeeList = employeeService.showList();
 		}else{
 			employeeList = employeeService.findByLikeName(findName);
+
 		}
 		if(employeeList.size() == 0){
 			model.addAttribute("notFindName", "一件もありませんでした");
 		}
 		model.addAttribute("employeeList", employeeList);
+
+		// オートコンプリート用にJavaScriptの配列の中身を文字列で作ってスコープへ格納
+		List<String> employeeListForAutocomplete = employeeService.getEmployeeListForAutocomplete(employeeList);
+		model.addAttribute("employeeListForAutocomplete", employeeListForAutocomplete);
+		System.out.println(employeeListForAutocomplete);
 		return "employee/list";
 	}
 
