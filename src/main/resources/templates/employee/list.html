@@ -38,7 +38,7 @@
         const availableTags = "[[${employeeListForAutocomplete}]]";
         console.dir($("#findName"));
         $("#findName").autocomplete({
-          //配列にしてる
+          //配列にしてる 
           source: availableTags.slice(1, -1).split(","),
         });
       });
