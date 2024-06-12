@@ -50,6 +50,7 @@ public class EmployeeService {
 	 * @param employee 従業員情報
 	 */
 	synchronized public void insert(Employee employee) {
+		employee.setId(employeeRepository.getPrimaryId());
 		employeeRepository.insert(employee);
 	}
 
