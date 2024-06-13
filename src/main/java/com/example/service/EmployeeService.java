@@ -1,5 +1,6 @@
 package com.example.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,16 @@ public class EmployeeService {
 	}
 
 	/**
+	 * 従業員情報を登録します.
+	 *
+	 * @param employee 従業員情報
+	 */
+	synchronized public void insert(Employee employee) {
+		employee.setId(employeeRepository.getPrimaryId());
+		employeeRepository.insert(employee);
+	}
+
+	/**
 	 * 従業員情報を更新します.
 	 * 
 	 * @param employee 更新した従業員情報
@@ -55,5 +66,32 @@ public class EmployeeService {
 
 	public List<Employee> findByLikeName(String name){
 		return employeeRepository.findByLikeName(name);
+	}
+
+	/**
+	 * オートコンプリート用にJavaScriptの配列の中身を文字列で作ります.
+	 *
+	 * @param employeeList 従業員一覧
+	 * @return　オートコンプリート用JavaScriptの配列の文字列
+	 * 　　　　　
+	 */
+	//
+	public List<String> getEmployeeListForAutocomplete(List<Employee> employeeList) {
+//		StringBuilder employeeListForAutocomplete = new StringBuilder();
+//		for (int i = 0; i < employeeList.size(); i++) {
+//			if (i != 0) {
+//				employeeListForAutocomplete.append(",");
+//			}
+//			Employee employee = employeeList.get(i);
+//			employeeListForAutocomplete.append("\"");
+//			employeeListForAutocomplete.append(employee.getName());
+//			employeeListForAutocomplete.append("\"");
+//		}
+		List<String> employeeListForAutocomplete = new ArrayList<>();
+		for (int i = 0; i < employeeList.size(); i++) {
+			Employee employee = employeeList.get(i);
+			employeeListForAutocomplete.add(employee.getName());
+		}
+		return employeeListForAutocomplete;
 	}
 }

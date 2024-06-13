@@ -1,8 +1,14 @@
 package com.example.controller;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
+import com.example.form.InsertAdministratorForm;
+import com.example.form.InsertEmployeeForm;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +26,7 @@ import com.example.service.EmployeeService;
 /**
  * 従業員情報を操作するコントローラー.
  * 
- * @author igamasayuki
+ * @author haruka.yamaneki
  *
  */
 @Controller
@@ -40,6 +46,16 @@ public class EmployeeController {
 		return new UpdateEmployeeForm();
 	}
 
+	/**
+	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
+	 *
+	 * @return フォーム
+	 */
+	@ModelAttribute
+	public InsertEmployeeForm insertEmployeeForm() {
+		return new InsertEmployeeForm();
+	}
+
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員一覧を表示する
 	/////////////////////////////////////////////////////
@@ -56,11 +72,17 @@ public class EmployeeController {
 			employeeList = employeeService.showList();
 		}else{
 			employeeList = employeeService.findByLikeName(findName);
+
 		}
 		if(employeeList.size() == 0){
 			model.addAttribute("notFindName", "一件もありませんでした");
 		}
 		model.addAttribute("employeeList", employeeList);
+
+		// オートコンプリート用にJavaScriptの配列の中身を文字列で作ってスコープへ格納
+		List<String> employeeListForAutocomplete = employeeService.getEmployeeListForAutocomplete(employeeList);
+		model.addAttribute("employeeListForAutocomplete", employeeListForAutocomplete);
+		System.out.println(employeeListForAutocomplete);
 		return "employee/list";
 	}
 
@@ -100,5 +122,56 @@ public class EmployeeController {
 		employee.setDependentsCount(form.getIntDependentsCount());
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
+	}
+
+	/**
+	 * 管理者登録画面を出力します.
+	 *
+	 * @return 管理者登録画面
+	 */
+	@GetMapping("/toInsert")
+	public String toInsert(InsertEmployeeForm form) {
+		return "employee/insert";
+	}
+
+	/**
+	 * 従業員情報を登録します.
+	 *
+	 * @param form 従業員情報用フォーム
+	 */
+	@PostMapping("/insert")
+	public String insert(@Validated InsertEmployeeForm form, BindingResult result){
+
+		if (result.hasErrors()) {
+			return toInsert(form);
+		}
+
+		Employee employee = new Employee();
+		BeanUtils.copyProperties(form,employee);
+		Date HireDate = java.util.Date.from(form.getHireDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		employee.setHireDate(HireDate);
+		employee.setSalary(Integer.parseInt(form.getSalary()));
+		employee.setDependentsCount(Integer.parseInt(form.getDependentsCount()));
+
+
+		try{
+			String base64FileString = Base64.getEncoder().encodeToString(form.getImage().getBytes());
+			if("image/jpg".equals(form.getImage().getContentType())) {
+				base64FileString = "data:image/jpeg;base64," + base64FileString;
+			} else if("image/png".equals(form.getImage().getContentType())) {
+				base64FileString = "data:image/png;base64," + base64FileString;
+			}
+
+			employee.setImage(base64FileString);
+
+		}catch (Exception e){
+
+		}
+
+		employeeService.insert(employee);
+
+		return "redirect:/employee/showList";
+
+
 	}
 }
